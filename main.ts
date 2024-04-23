@@ -16,13 +16,18 @@ function Schranke_auf () {
     m = -100
     motors.motorPower(m)
 }
+let Helligkeit = 0
 let m = 0
-_("Schranke2LED")
+_("elssner/ft3-schranke")
+let _4digit = grove.createDisplay(DigitalPin.C16, DigitalPin.C17)
 pins.digitalWritePin(DigitalPin.P0, 1)
+let Schaltwert = 60
 basic.pause(500)
 Schranke_zu()
-basic.forever(function () {
-    if (m == 0 && pins.analogReadPin(AnalogPin.P1) > 60) {
+loops.everyInterval(400, function () {
+    Helligkeit = pins.analogReadPin(AnalogPin.P1)
+    _4digit.show(Helligkeit)
+    if (m == 0 && Helligkeit > Schaltwert) {
         _("Motor aus und Lichtschranke dunkel -> Schranke öffnen")
         Schranke_auf()
     } else if (m < 0 && input.pinIsPressed(TouchPin.P2)) {
